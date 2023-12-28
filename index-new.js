@@ -131,37 +131,50 @@ app.post("/transfer-status", function (req, res) {
     const transferObj = new transferClass(req.body.CallSessionId, req.body.TransferToAgent, req.body.AgentPhone, req.body.ConversationHistoryUrl);
 
     //console.log(transferObj);
-    
-    handleCallTransfer(transferObj);
+  
     res.status = 200;
     res.header("Content-Type", "text/xml");
     res.send(
       '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
     );
+    
+    //Handle Call Transfer request
+      handleCallTransfer(transferObj);
 });
 
 
 // Call UPDATE API
-async function transferCallEngageUpdateAPI(from, to, crid) {
+async function transferCallEngageUpdateAPI(from, to, transferObj) {
 
-  const data = {
+  // Object for transferring call to an Agent
+  const data_transfer = {
     From: from,
     To: to,
-    Eml: "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo. Hello how are you?</Say></Response>",
+    Eml:'<?xml version="1.0" encoding="UTF-8"?><Response><Say> Please wait while I connect you to an Agent ! </Say><Dial><Client>sip:agent@sipaz1.engageio.com</Client></Dial></Response>'
+      //Eml: "<?xml version='1.0' encoding='UTF-8'?><Response><Say>This is Demo. Hello how are you?</Say></Response>",
   }
-url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + crid;
 
-try {
-  const response = await axios({
-      method: 'post',
-      url: url,
-      data: data,
-      headers: { 'Content-Type': 'application/json', 'apikey':"eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoiYXNob2stZXNtcC5jb20iLCJpZCI6OCwidXVpZCI6IjZkNTgzZWZlLThlNmItNGEwYy1hM2E5LTMyOWFhMzkzNDJmMiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiU2VydmljZUFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGkiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9LHsic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJDYWxsQVBJUHJvZHVjdCIsImNvbnRleHQiOiJcL2FwaVwvdjEiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwiaWF0IjoxNjk3MTE3Mjg0LCJqdGkiOiJhNDA0MjJiNC1kNGZkLTQ2NjMtOGRjOC00OThiNjI5ZjNhODUifQ==.IzQ0Gv7GMi1HPTAoUADgSYoIPAwh3dx1oYTA_EH5ClpLCE3P1zT9TnDn9bsDNKEfmuLldGwECko-HrYA0QgOlmrfmRZk0uHo3n9XkaVKnAH4J3TJJL4sejdag68fgnXjU9GCYKEkmS3evoUE6jlwrho7CVMa98bEAkXyRiBDxVagP9dP8czRxAqfjGSdMra3pJ2XBSfjW2um69N_NjKn8dYszoH--aD1H0VtaJGmhA0-pyYHzjWg2QHIv0-3aHsdbm62hQ9Ht4Df1AU5--OMw3UfzmMfoIQv7wTkir1Yisgd6AiNN4xFXFj1X23ieBBDV3Pc24xG6_j58raeErYXFQ==" }
-  });
-  console.log(response.data);
-} catch (error) {
-  console.error(`Error making HTTP request: ${error}`);
-}
+  // Object for call disconnection
+  const data_hangup = {
+    From: from,
+    To: to,
+    Status:'Terminated'
+  }
+
+  var data = data_hangup;
+
+  // Check whether need transfer to Agent
+  if (transferObj.TransferToAgent)
+    data = data_transfer;
+
+  url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + transferObj.CallSessionId;
+
+  try {
+        const response = await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data)
+        return response.data;
+    } catch(error) {
+      console.error(error);
+  }
 
 }
 
@@ -170,28 +183,27 @@ async function getCallRecordById(crid) {
 
     url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + crid
     try {
-          const response = await sendHttpRequest(url, CallApi.OpenAPI.HEADERS)
+          const response = await sendHttpRequest('get', url, CallApi.OpenAPI.HEADERS, '')
           return response.data;
       } catch(error) {
         console.error(error);
     }
 }
 
-async function sendHttpRequest(method, url,  headers) {
-
-
-
-
-
-
-
-    try {
-        //console.log(headers);
-        const response = await axios.get(url, {headers});
-        return response;
-        //console.log(response.data);
-    } catch (error) {
+async function sendHttpRequest(method, url, headers, data) {
+  try {
+    //console.log("HTTP send request input (try): "+  method + ' ' + url + ' ' + headers +' ' + data);
+    const response = await axios({
+        method: method,
+        url: url,
+        data: data,
+        headers: headers
+        //headers: { 'Content-Type': 'application/json', 'apikey':"eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoiYXNob2stZXNtcC5jb20iLCJpZCI6OCwidXVpZCI6IjZkNTgzZWZlLThlNmItNGEwYy1hM2E5LTMyOWFhMzkzNDJmMiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiU2VydmljZUFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGkiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9LHsic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJDYWxsQVBJUHJvZHVjdCIsImNvbnRleHQiOiJcL2FwaVwvdjEiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwiaWF0IjoxNjk3MTE3Mjg0LCJqdGkiOiJhNDA0MjJiNC1kNGZkLTQ2NjMtOGRjOC00OThiNjI5ZjNhODUifQ==.IzQ0Gv7GMi1HPTAoUADgSYoIPAwh3dx1oYTA_EH5ClpLCE3P1zT9TnDn9bsDNKEfmuLldGwECko-HrYA0QgOlmrfmRZk0uHo3n9XkaVKnAH4J3TJJL4sejdag68fgnXjU9GCYKEkmS3evoUE6jlwrho7CVMa98bEAkXyRiBDxVagP9dP8czRxAqfjGSdMra3pJ2XBSfjW2um69N_NjKn8dYszoH--aD1H0VtaJGmhA0-pyYHzjWg2QHIv0-3aHsdbm62hQ9Ht4Df1AU5--OMw3UfzmMfoIQv7wTkir1Yisgd6AiNN4xFXFj1X23ieBBDV3Pc24xG6_j58raeErYXFQ==" }
+          }); 
+      return response;
+  } catch (error) {
         console.error(`Error making HTTP request: ${error}`);
+        //console.log("HTTP send request input (catch): "+  method + ' ' + url + ' ' + headers +' ' + data);
         return error;
     }
 }
@@ -209,7 +221,7 @@ var data = {};
   }
 
  try {
-      res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj.CallSessionId)
+      res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
       //console.log ("Update API Call: "+res);
   } catch (error) {
       console.error(`Error making HTTP request: ${error}`);
@@ -220,8 +232,8 @@ var data = {};
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
   // Log the outgoing request
- //console.log('Request Headers:', config.headers);
- //console.log('Request Body:', config.data);
+//console.log('Request Headers:', config.headers);
+//console.log('Request Body:', config.data);
 
   // Important: request interceptors must return the request.
   return config;

@@ -39,12 +39,12 @@ CallApi.OpenAPI.BASE = "https://apigateway.engagedigital.ai/api/v1";
 
 var qs = require("qs");
 
-const port = 3000;
+var publicIp = "localhost"
+var port = 3000;
 
-const publicIp = "localhost";
 
 app.listen(port, () => {
-  console.log(`Node server is running at http://localhost:${port}`);
+  console.log("Node server is running at http://" + publicIp + ':'+ port);
 });
 
 function fetchUserInputEML(req, res, next) {

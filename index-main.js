@@ -48,7 +48,7 @@ app.listen(port, () => {
 });
 
 function callerJoinToConfEML(req) { 
-      return('<?xml version="1.0" encoding="UTF-8"?><Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial><Conference>' + req.CallID + '</Conference></Dial></Response>');
+      return('<?xml version="1.0" encoding="UTF-8"?><Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
 }
 //Play welcome greeting and caller join to conference
 function fetchUserInputEML() {
@@ -93,11 +93,11 @@ app.get("/eml", function (req, res) {
   res.header("Content-Type", "text/xml");
 
   // set response content
-  res.send(callerJoinToConfEML(req.From, req.To, req.CallID));
+  res.send(callerJoinToConfEML(req));
 
     // make call to Bot
-    var eml = '<?xml version="1.0" encoding="UTF-8"?><Response><Say> hi I am Bot speaking </Say><Dial><Conference>' + req.CallID + '</Conference></Dial></Response>'
-    makeCallAPI(req.From, req.To, eml)
+    var eml = '<?xml version="1.0" encoding="UTF-8"?><Response><Say> hi I am Bot speaking </Say><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
+    makeCallAPI(req.query.From, req.query.To, eml)
 });
 
 // This is POST method handler

@@ -97,7 +97,7 @@ app.get("/eml", function (req, res) {
 
     // make call to Bot
     var eml = '<?xml version="1.0" encoding="UTF-8"?><Response><Say> hi I am Bot speaking </Say><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
-    makeCallAPI(req.query.From, req.query.To, eml)
+    makeCallAPI(req.query.From, 'sip:123@rsys-test.sip.twilio.com', eml)
 });
 
 // This is POST method handler

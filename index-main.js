@@ -96,7 +96,7 @@ app.get("/eml", function (req, res) {
   res.send(callerJoinToConfEML(req));
 
     // make call to Bot
-    var eml = '<?xml version="1.0" encoding="UTF-8"?><Response><Say> hi I am Bot speaking </Say><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
+    var eml = '<Response><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
     makeCallAPI(req.query.To, 'sip:123@rsys-test.sip.twilio.com', eml)
 });
 

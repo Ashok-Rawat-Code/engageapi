@@ -3,6 +3,10 @@ const CallApi = require("engage-call-api-js-server-sdk/lib");
 const bodyParser = require('body-parser');
 const axios = require('axios');
 
+// Create a new Map
+let hashMap = new Map();
+
+
 class transferClass {
   constructor(CallSessionId, TransferToAgent, AgentPhone, ConversationHistoryUrl) {
       this.CallSessionId = CallSessionId;
@@ -75,6 +79,10 @@ app.get("/", function (req, res) {
   // set response content
 
   res.send(fetchUserInputEML());
+
+  setParentChildCR(req.query.CallID, "CR-21111");
+  console.log("Child CR:" + getChildCR(req.query.CallID));
+  deleteParentChildCR(req.query.CallID);
 });
 
 // This is GET path
@@ -225,3 +233,4 @@ axios.interceptors.request.use((config) => {
   // Important: request interceptors must return the error.
   return Promise.reject(error);
 });
+

@@ -37,6 +37,10 @@ const headers = {
 CallApi.OpenAPI.BASE = "https://apigateway.engagedigital.ai/api/v1";
 //CallApi.OpenAPI.BASE="https://webhook.site/5e546339-c026-435c-b925-230dd00d1111";
 
+// Create a new Map
+let hashMap = new Map();
+
+
 var qs = require("qs");
 
 var publicIp = "localhost"
@@ -79,11 +83,14 @@ app.get("/", function (req, res) {
   // set response content
 
   res.send(fetchUserInputEML());
+
 });
 
 // This is P2A - EML endpoint - for intial greeting and joining to conf
 
 app.get("/eml", function (req, res) {
+  var rsp;
+
   console.log("Printing parameters received for /eml (GET) ", req.query);
 
   // set response header
@@ -97,7 +104,11 @@ app.get("/eml", function (req, res) {
 
     // make call to Bot
     var eml = '<Response><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
-    makeCallAPI(req.query.To, 'sip:123@rsys-test.sip.twilio.com', eml)
+    
+      makeCallAPI(req.query.To, 'sip:123@rsys-test.sip.twilio.com', eml).then(result => {
+      //console.log(result.callReport.id);
+      setParentChildCR(req.query.CallID, result.callReport.id);
+    }) 
 });
 
 // This is POST method handler
@@ -170,6 +181,17 @@ async function transferCallEngageUpdateAPI(from, to, transferObj) {
 
   var data = data_hangup;
 
+  // Disconnect the Bot call leg
+  var childCR = getChildCR(transferObj.CallSessionId);
+  deleteParentChildCR(transferObj.CallSessionId);
+  
+  url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + childCR;
+  try {
+        await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data_hangup)
+  } catch(error) {
+          console.error(error);
+  }
+
   // Check whether need transfer to Agent
   if (transferObj.TransferToAgent)
     data = data_transfer;
@@ -226,6 +248,8 @@ var data = {};
       return error;
   }
 
+
+
  try {
       res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
       //console.log ("Update API Call: "+res);
@@ -264,10 +288,37 @@ async function makeCallAPI(from, to, eml) {
     url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call";
   
     try {
-          const response = await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data)
-          return response.data;
+          var rsp = await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data) 
+          //console.log (JSON.stringify(rsp.data))  
+          return (rsp.data);  
       } catch(error) {
         console.error(error);
     }
+
   }
   
+ //cr1 is parent cr-id, while cr2 is child
+function setParentChildCR(cr1, cr2)
+{
+    hashMap.set(cr1, cr2);
+
+    // Get a value by key and then delete it
+    let value = hashMap.get(cr1);
+    console.log(value); // Outputs: value1
+}
+
+//Delete map entry
+function deleteParentChildCR(cr1)
+{
+  // Delete the key-value pair
+  hashMap.delete(cr1);
+
+  // Check if the key exists
+  console.log(hashMap.has(cr1)); // Outputs: false
+}
+
+// Return child CR for input parent CR
+function getChildCR(cr1)
+{
+  return hashMap.get(cr1);
+}

@@ -53,12 +53,11 @@ app.listen(port, () => {
 
 function callerJoinToConfEML(req) { 
 
-      const myUrl = "http://" + publicIp + ":" + port + "/dialAction";
-      return('<Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial action='+myUrl+'><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
+      const myUrl = "\"http://" + publicIp + ":" + port + "/dialAction\"";
+      return('<Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial method="GET" action='+myUrl+'><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
 }
 //Play welcome greeting and caller join to conference
 function fetchUserInputEML() {
-    const myUrl = "http://" + publicIp + ":" + port + "/gatherAction";
   
     return (
       '<Response><Say> Welcome to Engage Digital Platform ! </Say><Say> Please wait while I connect you to Bot </Say><Dial><Client>sip:123@rsys-test.sip.twilio.com</Client></Dial></Response>'

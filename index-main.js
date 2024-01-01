@@ -43,7 +43,7 @@ let hashMap = new Map();
 
 var qs = require("qs");
 
-var publicIp = "localhost"
+var publicIp = "50.17.255.248"
 var port = 3000;
 
 
@@ -52,14 +52,16 @@ app.listen(port, () => {
 });
 
 function callerJoinToConfEML(req) { 
-      return('<?xml version="1.0" encoding="UTF-8"?><Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
+
+      const myUrl = "http://" + publicIp + ":" + port + "/dialAction";
+      return('<Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial action='+myUrl+'><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
 }
 //Play welcome greeting and caller join to conference
 function fetchUserInputEML() {
     const myUrl = "http://" + publicIp + ":" + port + "/gatherAction";
   
     return (
-      '<?xml version="1.0" encoding="UTF-8"?><Response><Say> Welcome to Engage Digital Platform ! </Say><Say> Please wait while I connect you to Bot </Say><Dial><Client>sip:123@rsys-test.sip.twilio.com</Client></Dial></Response>'
+      '<Response><Say> Welcome to Engage Digital Platform ! </Say><Say> Please wait while I connect you to Bot </Say><Dial><Client>sip:123@rsys-test.sip.twilio.com</Client></Dial></Response>'
     );
   }
 
@@ -146,6 +148,25 @@ app.get("/", function (req, res) {
   res.send("<?xml version='1.0' encoding='UTF-8'?><Response>Hello World !</Response>");
 });
 
+//Dial action verb handler - mainly when caller hangsup
+app.get("/dialAction", function (req, res) {
+  console.log("Printing parameters received for /dialAction (GET) ", req.query);
+
+  // set response header
+
+  res.status = 200;
+
+  res.header("Content-Type", "text/xml");
+  // set response content
+  res.send("<?xml version='1.0' encoding='UTF-8'?><Response>Hello World !</Response>");
+
+  var childCR = getChildCR(req.query.CallID)
+  deleteParentChildCR(childCR);
+  console.log("DialAction - Child CR: "+childCR)
+
+  //deleteCallAPI(childCR);
+
+});
 // This is Transfer callback handler
 
 app.post("/transfer-status", function (req, res) {

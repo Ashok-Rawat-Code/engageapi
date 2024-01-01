@@ -163,7 +163,7 @@ app.get("/dialAction", function (req, res) {
   deleteParentChildCR(childCR);
   console.log("DialAction - Child CR: "+childCR)
 
-  //deleteCallAPI(childCR);
+  deleteCallAPI(req.query.From, req.query.To, childCR);
 
 });
 // This is Transfer callback handler
@@ -330,24 +330,48 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
     Status:'Terminated'
   }
   
-  // Disconnect the Bot call leg
+  
   var childCR = getChildCR(transferObj.CallSessionId);
   deleteParentChildCR(transferObj.CallSessionId);
 
   console.log("Child CR (Bot) is: " + childCR);
 
+  // Disconnect the Bot call leg
+  deleteCallAPI(from, to, childCR);
+  /*
   url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + childCR;
   try {
         await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data_hangup)
   } catch(error) {
           console.error(error);
   }
+  */
 
   var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
   makeCallAPI(to, transferObj.AgentPhone, Eml);
   
 }
 
+//Delete Call API by CR
+function deleteCallAPI(from, to, CR) {
+
+  // Object for call disconnection
+  const data_hangup = {
+    From: from,
+    To: to,
+    Status:'Terminated'
+  }
+
+  console.log("CR to be deleted is: " + CR);
+
+  url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + CR;
+  try {
+        await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data_hangup)
+  } catch(error) {
+          console.error(error);
+  }
+
+}
 
  //cr1 is parent cr-id, while cr2 is child
 function setParentChildCR(cr1, cr2)

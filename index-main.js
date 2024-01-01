@@ -273,9 +273,9 @@ var data = {};
 
  try {
       //Pay attention to fromNumber and toNumber and change it appropriately
-      res = await transferCallEngageMakeAPI(data.fromNumber, data.toNumber, transferObj)
+      var res = await transferCallEngageMakeAPI(data.fromNumber, data.toNumber, transferObj)
       //res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
-      console.log ("Make Call API : "+res);
+      //console.log ("Make Call API : "+res);
   } catch (error) {
       console.error(`Error making HTTP request: ${error}`);
       return error;
@@ -285,8 +285,8 @@ var data = {};
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
   // Log the outgoing request
-console.log('Request Headers:', config.headers);
-console.log('Request Body:', config.data);
+//console.log('Request Headers:', config.headers);
+//console.log('Request Body:', config.data);
 
   // Important: request interceptors must return the request.
   return config;

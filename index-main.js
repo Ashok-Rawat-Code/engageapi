@@ -303,7 +303,12 @@ async function makeCallAPI(from, to, eml) {
 // Make Call API - for Agent leg - resulting into customer-agent conversation
 async function transferCallEngageMakeAPI(from, to, transferObj) {
 
-
+  // Object for call disconnection
+  const data_hangup = {
+    From: from,
+    To: to,
+    Status:'Terminated'
+  }
   var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
 
 

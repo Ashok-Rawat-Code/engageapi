@@ -105,7 +105,10 @@ app.get("/eml", function (req, res) {
     // make call to Bot
     var eml = '<Response><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
     
-      makeCallAPI(req.query.To, 'sip:123@rsys-test.sip.twilio.com', eml).then(result => {
+    var Bot = 'sip:123@sipaz1.engageio.com'
+    //var Bot = 'sip:123@rsys-test.sip.twilio.com'
+
+      makeCallAPI(req.query.To, Bot, eml).then(result => {
       //console.log(result.callReport.id);
       setParentChildCR(req.query.CallID, result.callReport.id);
     }) 
@@ -248,10 +251,9 @@ var data = {};
       return error;
   }
 
-
-
  try {
-      res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
+      res = await transferCallEngageUpdateAPI(data.fromNumber, transferObj.AgentPhone, transferObj)
+      //res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
       //console.log ("Update API Call: "+res);
   } catch (error) {
       console.error(`Error making HTTP request: ${error}`);
@@ -297,6 +299,22 @@ async function makeCallAPI(from, to, eml) {
 
   }
   
+// Make Call API - for Agent leg - resulting into customer-agent conversation
+async function transferCallEngageMakeAPI(from, to, transferObj) {
+
+
+  var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
+
+
+  // Disconnect the Bot call leg
+  var childCR = getChildCR(transferObj.CallSessionId);
+  deleteParentChildCR(transferObj.CallSessionId);
+
+  makeCallAPI(from, to, Eml);
+  
+}
+
+
  //cr1 is parent cr-id, while cr2 is child
 function setParentChildCR(cr1, cr2)
 {
@@ -322,3 +340,4 @@ function getChildCR(cr1)
 {
   return hashMap.get(cr1);
 }
+

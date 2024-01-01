@@ -252,9 +252,9 @@ var data = {};
   }
 
  try {
-      res = await transferCallEngageUpdateAPI(data.fromNumber, transferObj.AgentPhone, transferObj)
+      res = await transferCallEngageMakeAPI(data.fromNumber, transferObj.AgentPhone, transferObj)
       //res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
-      //console.log ("Update API Call: "+res);
+      console.log ("Make Call API : "+res);
   } catch (error) {
       console.error(`Error making HTTP request: ${error}`);
       return error;

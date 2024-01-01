@@ -353,7 +353,7 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
 }
 
 //Delete Call API by CR
-function deleteCallAPI(from, to, CR) {
+async function deleteCallAPI(from, to, CR) {
 
   // Object for call disconnection
   const data_hangup = {

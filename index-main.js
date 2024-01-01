@@ -252,7 +252,8 @@ var data = {};
   }
 
  try {
-      res = await transferCallEngageMakeAPI(data.fromNumber, transferObj.AgentPhone, transferObj)
+      //Pay attention to fromNumber and toNumber and change it appropriately
+      res = await transferCallEngageMakeAPI(data.fromNumber, data.toNumber, transferObj)
       //res = await transferCallEngageUpdateAPI(data.fromNumber, data.toNumber, transferObj)
       console.log ("Make Call API : "+res);
   } catch (error) {

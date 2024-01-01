@@ -309,8 +309,13 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
   // Disconnect the Bot call leg
   var childCR = getChildCR(transferObj.CallSessionId);
   deleteParentChildCR(transferObj.CallSessionId);
-
-  makeCallAPI(from, to, Eml);
+  url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + childCR;
+  try {
+        await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data_hangup)
+  } catch(error) {
+          console.error(error);
+  }
+  makeCallAPI(to, transferObj.AgentPhone, Eml);
   
 }
 

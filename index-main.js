@@ -348,8 +348,10 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
   */
 
   var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
-  makeCallAPI(to, transferObj.AgentPhone, Eml);
-  
+  makeCallAPI(to, transferObj.AgentPhone, Eml).then(result => {
+    console.log(result.callReport.id);
+    setParentChildCR(transferObj.CallSessionId, result.callReport.id);
+  })
 }
 
 //Delete Call API by CR

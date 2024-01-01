@@ -309,18 +309,21 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
     To: to,
     Status:'Terminated'
   }
-  var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
-
-
+  
   // Disconnect the Bot call leg
   var childCR = getChildCR(transferObj.CallSessionId);
   deleteParentChildCR(transferObj.CallSessionId);
+
+  console.log("Child CR (Bot) is: " + childCR);
+
   url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call/" + childCR;
   try {
         await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data_hangup)
   } catch(error) {
           console.error(error);
   }
+
+  var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
   makeCallAPI(to, transferObj.AgentPhone, Eml);
   
 }

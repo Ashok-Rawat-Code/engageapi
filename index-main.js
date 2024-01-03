@@ -110,7 +110,10 @@ app.get("/eml", function (req, res) {
     
     var Bot = 'sip:123@sipaz1.engageio.com'
     //var Bot = 'sip:123@rsys-test.sip.twilio.com'
-    var header = setCustomParam(req.query.CallID, req.query.To, req.query.From)
+    
+    var header = setCustomParam(JSON.stringify(req.query.CallID), 
+                                JSON.stringify(req.query.To), 
+                                JSON.stringify(req.query.From))
 
       makeCallAPI(req.query.To, Bot, eml, header).then(result => {
       //console.log(result.callReport);
@@ -289,8 +292,8 @@ var data = {};
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
   // Log the outgoing request
-console.log('Request Headers:', config.headers);
-console.log('Request Body:', config.data);
+//console.log('Request Headers:', config.headers);
+//console.log('Request Body:', config.data);
 
   // Important: request interceptors must return the request.
   return config;

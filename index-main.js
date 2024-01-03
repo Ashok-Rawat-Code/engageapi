@@ -289,8 +289,8 @@ var data = {};
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
   // Log the outgoing request
-//console.log('Request Headers:', config.headers);
-//console.log('Request Body:', config.data);
+console.log('Request Headers:', config.headers);
+console.log('Request Body:', config.data);
 
   // Important: request interceptors must return the request.
   return config;

@@ -24,12 +24,10 @@ app.use(
 // parse application/json
 app.use(bodyParser.json());
 
-const key = "eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoiYXNob2stZXNtcC5jb20iLCJpZCI6OCwidXVpZCI6IjZkNTgzZWZlLThlNmItNGEwYy1hM2E5LTMyOWFhMzkzNDJmMiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiU2VydmljZUFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGkiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9LHsic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJDYWxsQVBJUHJvZHVjdCIsImNvbnRleHQiOiJcL2FwaVwvdjEiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwiaWF0IjoxNjk3MTE3Mjg0LCJqdGkiOiJhNDA0MjJiNC1kNGZkLTQ2NjMtOGRjOC00OThiNjI5ZjNhODUifQ==.IzQ0Gv7GMi1HPTAoUADgSYoIPAwh3dx1oYTA_EH5ClpLCE3P1zT9TnDn9bsDNKEfmuLldGwECko-HrYA0QgOlmrfmRZk0uHo3n9XkaVKnAH4J3TJJL4sejdag68fgnXjU9GCYKEkmS3evoUE6jlwrho7CVMa98bEAkXyRiBDxVagP9dP8czRxAqfjGSdMra3pJ2XBSfjW2um69N_NjKn8dYszoH--aD1H0VtaJGmhA0-pyYHzjWg2QHIv0-3aHsdbm62hQ9Ht4Df1AU5--OMw3UfzmMfoIQv7wTkir1Yisgd6AiNN4xFXFj1X23ieBBDV3Pc24xG6_j58raeErYXFQ==";
-
 //API configuration
 CallApi.OpenAPI.HEADERS = {
-  apikey: key
-}
+  apikey:"eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoiYXNob2stZXNtcC5jb20iLCJpZCI6OCwidXVpZCI6IjZkNTgzZWZlLThlNmItNGEwYy1hM2E5LTMyOWFhMzkzNDJmMiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiU2VydmljZUFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGkiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9LHsic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJDYWxsQVBJUHJvZHVjdCIsImNvbnRleHQiOiJcL2FwaVwvdjEiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwiaWF0IjoxNjk3MTE3Mjg0LCJqdGkiOiJhNDA0MjJiNC1kNGZkLTQ2NjMtOGRjOC00OThiNjI5ZjNhODUifQ==.IzQ0Gv7GMi1HPTAoUADgSYoIPAwh3dx1oYTA_EH5ClpLCE3P1zT9TnDn9bsDNKEfmuLldGwECko-HrYA0QgOlmrfmRZk0uHo3n9XkaVKnAH4J3TJJL4sejdag68fgnXjU9GCYKEkmS3evoUE6jlwrho7CVMa98bEAkXyRiBDxVagP9dP8czRxAqfjGSdMra3pJ2XBSfjW2um69N_NjKn8dYszoH--aD1H0VtaJGmhA0-pyYHzjWg2QHIv0-3aHsdbm62hQ9Ht4Df1AU5--OMw3UfzmMfoIQv7wTkir1Yisgd6AiNN4xFXFj1X23ieBBDV3Pc24xG6_j58raeErYXFQ=="
+};
 
 const headers = {
   'Content-Type':'application/json',
@@ -110,12 +108,10 @@ app.get("/eml", function (req, res) {
     
     var Bot = 'sip:123@sipaz1.engageio.com'
     //var Bot = 'sip:123@rsys-test.sip.twilio.com'
-    var header = setCustomParam(req.query.CallID, req.query.To, req.query.From)
 
-      makeCallAPI(req.query.To, Bot, eml, header).then(result => {
+      makeCallAPI(req.query.To, Bot, eml).then(result => {
       //console.log(result.callReport);
       setParentChildCR(req.query.CallID, result.callReport.id);
-      
     }) 
 });
 
@@ -304,7 +300,7 @@ axios.interceptors.request.use((config) => {
 
 
 // make Call API - call to Bot - and join to conf
-async function makeCallAPI(from, to, eml, header) {
+async function makeCallAPI(from, to, eml) {
     // Object for transferring call to an Agent
     const data = {
       From: from,
@@ -315,7 +311,7 @@ async function makeCallAPI(from, to, eml, header) {
     url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call";
   
     try {
-          var rsp = await sendHttpRequest('post', url, header, data) 
+          var rsp = await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data) 
           //console.log (JSON.stringify(rsp.data))  
           return (rsp.data);  
       } catch(error) {
@@ -352,7 +348,7 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
   */
 
   var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
-  makeCallAPI(to, transferObj.AgentPhone, Eml, CallApi.OpenAPI.HEADERS).then(result => {
+  makeCallAPI(to, transferObj.AgentPhone, Eml).then(result => {
     console.log(result.callReport.id);
     setParentChildCR(transferObj.CallSessionId, result.callReport.id);
   })
@@ -403,23 +399,5 @@ function deleteParentChildCR(cr1)
 function getChildCR(cr1)
 {
   return hashMap.get(cr1);
-}
-
-function setCustomParam(sessionID, calledNumber, callerNumber)
-{
-  //var param = '[{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallSessionId\",\"HeaderValue\":\"en-US\"},{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CalledNumber\",\"HeaderValue\":\"hi-IN\"}]'
-
-  var param = '[{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallSessionId\",\"HeaderValue\":'+sessionID+'},'+ 
-              '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CalledNumber\",\"HeaderValue\":'+calledNumber+'},'+
-              '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallerNumber\",\"HeaderValue\":'+callerNumber+'},]'
-
-  var custom_header = {
-                apikey: key,
-                CustomProperties: param
-              }
-
-  console.log(custom_header);
-
-  return custom_header;
 }
 

@@ -414,7 +414,7 @@ function setCustomParam(sessionID, calledNumber, callerNumber)
 
   var param = '[{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallSessionId\",\"HeaderValue\":'+sessionID+'},'+ 
               '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CalledNumber\",\"HeaderValue\":'+calledNumber+'},'+
-              '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallerNumber\",\"HeaderValue\":'+callerNumber+'},]'
+              '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallerNumber\",\"HeaderValue\":'+callerNumber+'}]'
 
   var custom_header = {
                 apikey: key,

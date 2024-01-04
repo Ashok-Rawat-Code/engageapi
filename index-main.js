@@ -31,10 +31,12 @@ CallApi.OpenAPI.HEADERS = {
   apikey: key
 }
 
+/*
 const headers = {
   'Content-Type':'application/json',
   'apikey':"eyJ4NXQiOiJZamd5TW1GalkyRXpNVEZtWTJNMU9HRmtaalV3TnpnMVpEVmhZVGRtTnpkaU9HUmhNR1kzWmc9PSIsImtpZCI6ImFwaV9rZXlfY2VydGlmaWNhdGVfYWxpYXMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJyYWRpc3lzQGNhcmJvbi5zdXBlciIsImFwcGxpY2F0aW9uIjp7Im93bmVyIjoicmFkaXN5cyIsInRpZXJRdW90YVR5cGUiOm51bGwsInRpZXIiOiJVbmxpbWl0ZWQiLCJuYW1lIjoiYXNob2stZXNtcC5jb20iLCJpZCI6OCwidXVpZCI6IjZkNTgzZWZlLThlNmItNGEwYy1hM2E5LTMyOWFhMzkzNDJmMiJ9LCJpc3MiOiJodHRwczpcL1wvYXBpbS5lbmdhZ2VkaWdpdGFsLmFpOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IlVubGltaXRlZCI6eyJ0aWVyUXVvdGFUeXBlIjoicmVxdWVzdENvdW50Iiwic3RvcE9uUXVvdGFSZWFjaCI6dHJ1ZSwic3Bpa2VBcnJlc3RMaW1pdCI6MCwic3Bpa2VBcnJlc3RVbml0IjpudWxsfX0sImtleXR5cGUiOiJQUk9EVUNUSU9OIiwic3Vic2NyaWJlZEFQSXMiOlt7InN1YnNjcmliZXJUZW5hbnREb21haW4iOiJjYXJib24uc3VwZXIiLCJuYW1lIjoiU2VydmljZUFQSVByb2R1Y3QiLCJjb250ZXh0IjoiXC9hcGkiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9LHsic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJDYWxsQVBJUHJvZHVjdCIsImNvbnRleHQiOiJcL2FwaVwvdjEiLCJwdWJsaXNoZXIiOiJyYWRpc3lzIiwidmVyc2lvbiI6IjEuMC4wIiwic3Vic2NyaXB0aW9uVGllciI6IlVubGltaXRlZCJ9XSwiaWF0IjoxNjk3MTE3Mjg0LCJqdGkiOiJhNDA0MjJiNC1kNGZkLTQ2NjMtOGRjOC00OThiNjI5ZjNhODUifQ==.IzQ0Gv7GMi1HPTAoUADgSYoIPAwh3dx1oYTA_EH5ClpLCE3P1zT9TnDn9bsDNKEfmuLldGwECko-HrYA0QgOlmrfmRZk0uHo3n9XkaVKnAH4J3TJJL4sejdag68fgnXjU9GCYKEkmS3evoUE6jlwrho7CVMa98bEAkXyRiBDxVagP9dP8czRxAqfjGSdMra3pJ2XBSfjW2um69N_NjKn8dYszoH--aD1H0VtaJGmhA0-pyYHzjWg2QHIv0-3aHsdbm62hQ9Ht4Df1AU5--OMw3UfzmMfoIQv7wTkir1Yisgd6AiNN4xFXFj1X23ieBBDV3Pc24xG6_j58raeErYXFQ=="
 };
+*/
 
 CallApi.OpenAPI.BASE = "https://apigateway.engagedigital.ai/api/v1";
 //CallApi.OpenAPI.BASE="https://webhook.site/5e546339-c026-435c-b925-230dd00d1111";
@@ -111,11 +113,11 @@ app.get("/eml", function (req, res) {
     var Bot = 'sip:123@sipaz1.engageio.com'
     //var Bot = 'sip:123@rsys-test.sip.twilio.com'
     
-    var header = setCustomParam(JSON.stringify(req.query.CallID), 
+    var custom_param = setCustomParam(JSON.stringify(req.query.CallID), 
                                 JSON.stringify(req.query.To), 
                                 JSON.stringify(req.query.From))
 
-      makeCallAPI(req.query.To, Bot, eml, header).then(result => {
+      makeCallAPI(req.query.To, Bot, eml, custom_param).then(result => {
       //console.log(result.callReport);
       setParentChildCR(req.query.CallID, result.callReport.id);
       
@@ -292,8 +294,8 @@ var data = {};
 // Add a request interceptor
 axios.interceptors.request.use((config) => {
   // Log the outgoing request
-//console.log('Request Headers:', config.headers);
-//console.log('Request Body:', config.data);
+console.log('Request Headers:', config.headers);
+console.log('Request Body:', config.data);
 
   // Important: request interceptors must return the request.
   return config;
@@ -307,18 +309,32 @@ axios.interceptors.request.use((config) => {
  
 
 // make Call API - call to Bot - and join to conf
-async function makeCallAPI(from, to, eml, header) {
+async function makeCallAPI(from, to, eml, custom_param) {
     // Object for transferring call to an Agent
-    const data = {
+    const data_custom = {
+      From: from,
+      To: to,
+      Eml:eml,
+      CustomProperties:custom_param
+    }
+
+    const data_no_custom = {
       From: from,
       To: to,
       Eml:eml
     }
   
+    var data = data_no_custom
+
+    // Decide whether to include custom parameter or no
+    if (custom_param != null) {
+      data = data_custom
+    }
+
     url = CallApi.OpenAPI.BASE + "/accounts/"+AC_ID+"/call";
   
     try {
-          var rsp = await sendHttpRequest('post', url, header, data) 
+          var rsp = await sendHttpRequest('post', url, CallApi.OpenAPI.HEADERS, data) 
           //console.log (JSON.stringify(rsp.data))  
           return (rsp.data);  
       } catch(error) {
@@ -355,8 +371,8 @@ async function transferCallEngageMakeAPI(from, to, transferObj) {
   */
 
   var Eml = '<Response><Dial><Conference>' + transferObj.CallSessionId + '</Conference></Dial></Response>'
-  makeCallAPI(to, transferObj.AgentPhone, Eml, CallApi.OpenAPI.HEADERS).then(result => {
-    console.log(result.callReport.id);
+  makeCallAPI(to, transferObj.AgentPhone, Eml, null).then(result => {
+    //console.log(result.callReport.id);
     setParentChildCR(transferObj.CallSessionId, result.callReport.id);
   })
 }
@@ -416,13 +432,6 @@ function setCustomParam(sessionID, calledNumber, callerNumber)
               '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CalledNumber\",\"HeaderValue\":'+calledNumber+'},'+
               '{\"Type\": \"SipCustomHeader\",\"HeaderName\":\"X-CallerNumber\",\"HeaderValue\":'+callerNumber+'}]'
 
-  var custom_header = {
-                apikey: key,
-                CustomProperties: param
-              }
-
-  console.log(custom_header);
-
-  return custom_header;
+  return param;
 }
 

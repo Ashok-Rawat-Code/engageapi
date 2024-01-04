@@ -114,8 +114,8 @@ app.get("/eml", function (req, res) {
     // make call to Bot
     var eml = '<Response><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
     
-    var Bot = 'sip:123@sipaz1.engageio.com'
-    //var Bot = 'sip:123@rsys-test.sip.twilio.com'
+    //var Bot = 'sip:123@sipaz1.engageio.com'
+    var Bot = 'sip:123@rsys-test.sip.twilio.com'
     
     var custom_param = setCustomParam(JSON.stringify(req.query.CallID), 
                                 JSON.stringify(req.query.To), 

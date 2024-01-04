@@ -58,7 +58,11 @@ app.listen(port, () => {
 function callerJoinToConfEML(req) { 
 
       const myUrl = "\"http://" + publicIp + ":" + port + "/dialAction\"";
-      return('<Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial method="GET" action='+myUrl+'><Conference>' + req.query.CallID + '</Conference></Dial></Response>');
+      const joinCallback = "\"http://" + publicIp + ":" + port + "/join\"";
+
+      return('<Response><Say> Welcome to Engage Digital Platform ! Please wait while I connect you to Bot </Say><Dial bridge="audio" method="GET" action='
+      +myUrl+'><Conference statusCallbackEvent="join" method="GET" statusCallbackUrl='+joinCallback+'>' 
+      + req.query.CallID + '</Conference></Dial></Response>');
 }
 //Play welcome greeting and caller join to conference
 function fetchUserInputEML() {
@@ -124,6 +128,7 @@ app.get("/eml", function (req, res) {
     }) 
 });
 
+/*
 // This is POST method handler
 
 app.post("/eml", function (req, res) {
@@ -139,6 +144,7 @@ app.post("/eml", function (req, res) {
 
   res.send(fetchUserInputEML());
 });
+*/
 
 //This is default GET method handler
 
@@ -435,3 +441,17 @@ function setCustomParam(sessionID, calledNumber, callerNumber)
   return param;
 }
 
+app.get("/join", function (req, res) {
+  console.log("Printing parameters received for / (join) ", req.query);
+
+  // set response header
+
+  res.status = 200;
+
+  res.header("Content-Type", "text/xml");
+
+  // set response content
+
+  res.send();
+
+});

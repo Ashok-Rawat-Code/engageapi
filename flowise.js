@@ -146,12 +146,8 @@ app.post("/transfer-status", function (req, res) {
 app.post("/flowise", function (req, res) {
 
   flowiseAPI(req, res);
-  
-  res.status = 200;
-  res.header("Content-Type", "text/xml");
-  res.send(
-    '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
-  );
+
+
 
 });
 
@@ -163,10 +159,17 @@ async function flowiseAPI(req, res) {
 
     try {
           response =  sendHttpRequest('post', url, headers, req.body)
-          return response.data;
+          console.log(JSONstrinfiy(response.data));
       } catch(error) {
         console.error(error);
     } 
+
+    res.status = 200;
+    res.header("Content-Type", "text/xml");
+    res.send(
+      '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
+    );
+
 };
 
 // Call UPDATE API

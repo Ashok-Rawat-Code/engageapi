@@ -152,25 +152,27 @@ app.post("/flowise", function (req, res) {
 });
 
 
+
 async function flowiseAPI(req, res) {
     var response;
     const url = "http://172.26.0.145:3000/api/v1/prediction/fcc8c46c-8a80-4f4c-96af-700ed13afb29"
     console.log(req.body);
 
     try {
-          response =  sendHttpRequest('post', url, headers, req.body)
-          console.log(JSONstrinfiy(response.data));
+          response =  await sendHttpRequest('post', url, headers, req.body)
+          console.log(JSON.stringify(response.data));
       } catch(error) {
         console.error(error);
-    } 
+    }
 
     res.status = 200;
-    res.header("Content-Type", "text/xml");
+    res.header("Content-Type", "application/json");
     res.send(
-      '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
+      JSON.stringify(response.data)
     );
 
 };
+
 
 // Call UPDATE API
 async function transferCallEngageUpdateAPI(from, to, transferObj) {

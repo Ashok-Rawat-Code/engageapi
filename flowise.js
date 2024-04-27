@@ -150,21 +150,18 @@ app.post("/flowise", function (req, res) {
     console.log(req.body);
 
     try {
-          const response = await sendHttpRequest('get', url, headers, req.body)
+          const response =  sendHttpRequest('post', url, headers, req.body)
           return response.data;
       } catch(error) {
         console.error(error);
     }
-    sendHttpRequest('post', url, hdr, data)
 
     res.status = 200;
-    res.header("Content-Type", "text/xml");
+    res.header("Content-Type", "application/json");
     res.send(
-      '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
+      response.data
     );
     
-    //Handle Call Transfer request
-      handleCallTransfer(transferObj);
 });
 
 // Call UPDATE API

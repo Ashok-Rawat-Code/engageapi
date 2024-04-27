@@ -144,13 +144,13 @@ app.post("/transfer-status", function (req, res) {
 
 //Flowise API handler
 app.post("/flowise", function (req, res) {
-    //const transferObj = new transferClass(req.body.CallSessionId, req.body.TransferToAgent, req.body.AgentPhone, req.body.ConversationHistoryUrl);
-  
+    
+    var response;
     const url = "http://172.26.0.145:3000/api/v1/prediction/fcc8c46c-8a80-4f4c-96af-700ed13afb29"
     console.log(req.body);
 
     try {
-          const response =  sendHttpRequest('post', url, headers, req.body)
+          response =  sendHttpRequest('post', url, headers, req.body)
           console.log(response.data);
       } catch(error) {
         console.error(error);

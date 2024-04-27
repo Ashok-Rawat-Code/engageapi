@@ -40,7 +40,7 @@ CallApi.OpenAPI.BASE = "https://apigateway.engagedigital.ai/api/v1";
 var qs = require("qs");
 
 var publicIp = "localhost"
-var port = 3000;
+var port = 3300;
 
 
 app.listen(port, () => {
@@ -142,6 +142,30 @@ app.post("/transfer-status", function (req, res) {
       handleCallTransfer(transferObj);
 });
 
+//Flowise API handler
+app.post("/flowise", function (req, res) {
+    //const transferObj = new transferClass(req.body.CallSessionId, req.body.TransferToAgent, req.body.AgentPhone, req.body.ConversationHistoryUrl);
+  
+    const url = "http://172.26.0.145:3000/api/v1/prediction/fcc8c46c-8a80-4f4c-96af-700ed13afb29"
+    console.log(req.body);
+
+    try {
+          const response = await sendHttpRequest('get', url, headers, req.body)
+          return response.data;
+      } catch(error) {
+        console.error(error);
+    }
+    sendHttpRequest('post', url, hdr, data)
+
+    res.status = 200;
+    res.header("Content-Type", "text/xml");
+    res.send(
+      '<?xml version="1.0" encoding="UTF-8"?> <Response><Say> Thank you I received input </Say></Response>'
+    );
+    
+    //Handle Call Transfer request
+      handleCallTransfer(transferObj);
+});
 
 // Call UPDATE API
 async function transferCallEngageUpdateAPI(from, to, transferObj) {
@@ -207,6 +231,7 @@ async function sendHttpRequest(method, url, headers, data) {
         return error;
     }
 }
+
 
 async function handleCallTransfer(transferObj) {
 var data = {};

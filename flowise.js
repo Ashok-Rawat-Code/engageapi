@@ -151,7 +151,7 @@ app.post("/flowise", function (req, res) {
 
     try {
           const response =  sendHttpRequest('post', url, headers, req.body)
-          return response.data;
+          console.log(response.data);
       } catch(error) {
         console.error(error);
     }

@@ -47,7 +47,7 @@ let hashMap = new Map();
 
 var qs = require("qs");
 
-var publicIp = "50.17.255.248"
+var publicIp = "localhost"
 var port = 3000;
 
 

@@ -48,7 +48,7 @@ let hashMap = new Map();
 var qs = require("qs");
 
 var publicIp = "54.163.50.248"
-var port = 5000;
+var port = 3000;
 
 
 app.listen(port, () => {
@@ -81,6 +81,7 @@ function fetchUserInputEML() {
 app.get("/status", function (req, res) {
   var rsp;
 
+  console.log("Status Callback !");
   console.log("Printing parameters received for /Status (GET) ", req.query);
 
   // set response header
@@ -89,30 +90,6 @@ app.get("/status", function (req, res) {
   res.send();
 
   deleteCallAPI(req.query.From, req.query.To, req.query.CallID);
-
-  /*
-
-  res.header("Content-Type", "text/xml");
-
-  // set response content
-  res.send(callerJoinToConfEML(req));
-
-    // make call to Bot
-    var eml = '<Response><Dial><Conference>' + req.query.CallID + '</Conference></Dial></Response>'
-    
-    //var Bot = 'sip:123@sipaz1.engageio.com'
-    var Bot = 'sip:123@rsys-test.sip.twilio.com'
-    
-    var custom_param = setCustomParam(JSON.stringify(req.query.CallID), 
-                                JSON.stringify(req.query.To), 
-                                JSON.stringify(req.query.From))
-
-      makeCallAPI(req.query.To, Bot, eml, custom_param).then(result => {
-      //console.log(result.callReport);
-      setParentChildCR(req.query.CallID, result.callReport.id);
-      
-    }) 
-    */
 });
 
 //This is default GET method handler
